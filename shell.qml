@@ -9,12 +9,12 @@ import "modules/notifBoard"
 import Quickshell
 
 ShellRoot {
-    Background {}
-    Bar {}
-    Calendar {}
-    Dashboard {}
-    PowerMenu {}
-    AppLauncher {}
-    Notifications {}
-    NotifBoard {}
+	Background {}
+	Bar {}
+	Calendar {}
+	Dashboard {}
+	PowerMenu {}
+	AppLauncher {}
+	Notifications {}
+	NotifBoard {}
 }
