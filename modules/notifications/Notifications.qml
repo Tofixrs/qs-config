@@ -29,7 +29,7 @@ Variants {
 				property real contentHeight: {
 					let sum = 0;
 					for (let i = 0; i < this.count; i++) {
-						sum += this.itemAtIndex(i).height + 20;
+						sum += (this.itemAtIndex(i)?.height ?? 0) + 20;
 					}
 					return sum;
 				}
