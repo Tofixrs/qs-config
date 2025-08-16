@@ -4,8 +4,8 @@ import QtQuick.Layouts
 import Quickshell.Hyprland
 import Quickshell
 import QtQuick
-import "../../../services"
-import "../../../widgets"
+import qs.services
+import qs.widgets
 
 Module {
 	id: root
@@ -14,9 +14,10 @@ Module {
 	RowLayout {
 		Repeater {
 			model: Hyprland.workspaces
-			RowLayout {
+			Loader {
 				id: ws
-				required property HyprlandWorkspace modelData
+				asynchronous: true
+				active: modelData?.id != null
 				function getState() {
 					if (root.hMonitor.id == modelData.monitor.id && modelData.active)
 						return "active";
@@ -46,25 +47,28 @@ Module {
 						return 5;
 					}
 				}
-				MText {
-					text: ws.modelData.name
-				}
-				Rectangle {
-					id: wsIndicator
-					color: ws.getColor()
+				required property HyprlandWorkspace modelData
+				sourceComponent: RowLayout {
+					MText {
+						text: ws.modelData.name
+					}
+					Rectangle {
+						id: wsIndicator
+						color: ws.getColor()
 
-					implicitWidth: 5
-					implicitHeight: 5
-					radius: 5
+						implicitWidth: 5
+						implicitHeight: 5
+						radius: 5
 
-					PropertyAnimation {
-						id: widthAnim
-						target: wsIndicator
-						property: "implicitWidth"
-						to: ws.getWidth()
-						running: true
-						onRunningChanged: this.running = true
-						duration: 50
+						PropertyAnimation {
+							id: widthAnim
+							target: wsIndicator
+							property: "implicitWidth"
+							to: ws.getWidth()
+							running: true
+							onRunningChanged: this.running = true
+							duration: 50
+						}
 					}
 				}
 			}

@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick.Layouts
 import QtQuick
 import qs.services
@@ -5,6 +6,8 @@ import qs.widgets
 import Quickshell.Bluetooth
 
 RowLayout {
+	id: root
+	property bool sinksVisible: false
 	Layout.fillWidth: true
 	GridLayout {
 		columns: 2
@@ -57,6 +60,9 @@ RowLayout {
 			color: "transparent"
 		}
 	}
+	Item {
+		Layout.fillWidth: true
+	}
 
 	component SysToggle: MButton {
 		required property bool active
@@ -70,11 +76,13 @@ RowLayout {
 		textColor: active ? Theme.get().foreground : Theme.get().text
 	}
 	ColumnLayout {
+		Layout.fillWidth: true
 		Loader {
 			asynchronous: true
 			active: Brightness.getSelectedInterface() != undefined
 			visible: this.active
 			sourceComponent: RowLayout {
+				Layout.fillWidth: true
 				MButton {
 					text: Icons.getBrightnessIcon(Brightness.getSelectedInterface()?.brightnessPercent)
 					font.family: "Material Symbols Rounded"
@@ -96,9 +104,13 @@ RowLayout {
 			asynchronous: true
 			active: Audio.sink != null
 			sourceComponent: RowLayout {
+				Layout.fillWidth: true
 				MButton {
 					onClicked: {
 						Audio.sink.audio.muted = !Audio.muted;
+					}
+					onRightClicked: {
+						root.sinksVisible = !root.sinksVisible;
 					}
 					text: Audio.sink.audio.muted ? "volume_off" : Icons.getVolumeIcon(Audio.sink.audio.volume * 100)
 					font.family: "Material Symbols Rounded"
