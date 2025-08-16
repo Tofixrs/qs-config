@@ -1,9 +1,8 @@
 pragma Singleton
 
 import Quickshell
-import Quickshell.Io
 import Quickshell.Services.Notifications
-import "../utils"
+import qs.utils
 
 Singleton {
 	id: root

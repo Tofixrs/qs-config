@@ -1,7 +1,7 @@
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick
-import "../services"
+import qs.services
 
 Slider {
 	id: slider

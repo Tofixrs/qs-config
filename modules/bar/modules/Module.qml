@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import "../../../services"
+import qs.services
 
 RowLayout {
 	id: root

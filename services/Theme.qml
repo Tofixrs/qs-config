@@ -1,6 +1,5 @@
 pragma Singleton
-import "../utils"
-import "../utils.js" as Utils
+import qs.utils
 
 import Quickshell
 import Quickshell.Io

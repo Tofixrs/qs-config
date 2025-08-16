@@ -1,8 +1,7 @@
-import "../widgets"
-import "../services"
+import qs.services
+import qs.widgets
 
 import Quickshell
-import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Wayland

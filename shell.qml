@@ -1,11 +1,11 @@
 //@ pragma IconTheme Papirus-Dark
-import "modules"
-import "modules/background"
-import "modules/dashboard"
-import "modules/appLauncher"
-import "modules/bar"
-import "modules/notifications"
-import "modules/notifBoard"
+import qs.modules
+import qs.modules.background
+import qs.modules.dashboard
+import qs.modules.appLauncher
+import qs.modules.bar
+import qs.modules.notifications
+import qs.modules.notifBoard
 import Quickshell
 
 ShellRoot {

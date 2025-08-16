@@ -1,10 +1,8 @@
-import "../../widgets"
-import "../../services" as Services
+import qs.widgets
 import Quickshell
 import Quickshell.Wayland
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Effects
 
 Variants {
 	model: Quickshell.screens

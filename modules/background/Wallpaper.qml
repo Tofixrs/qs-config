@@ -1,7 +1,7 @@
 import QtQuick
 import QtMultimedia
-import "../../services"
-import "../../utils"
+import qs.services
+import qs.utils
 
 Item {
 	id: root

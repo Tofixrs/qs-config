@@ -1,6 +1,6 @@
 import QtQuick.Layouts
 import QtQuick
-import "../services"
+import qs.services
 
 Rectangle {
 	id: root

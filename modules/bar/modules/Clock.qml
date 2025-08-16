@@ -1,8 +1,8 @@
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
-import "../../../widgets"
-import "../../../services"
+import qs.widgets
+import qs.services
 
 Module {
 	required property ShellScreen s

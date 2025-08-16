@@ -1,9 +1,9 @@
 import QtQuick.Layouts
 import QtQuick
 import Quickshell.Widgets
-import "../../../services"
-import "../../../widgets"
-import "../../../utils"
+import qs.services
+import qs.widgets
+import qs.utils
 
 Rectangle {
 	Layout.fillWidth: true

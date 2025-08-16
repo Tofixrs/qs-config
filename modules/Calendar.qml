@@ -4,8 +4,8 @@ import Quickshell
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "../widgets"
-import "../services"
+import qs.widgets
+import qs.services
 
 Variants {
 	id: root

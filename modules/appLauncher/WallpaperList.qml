@@ -1,9 +1,8 @@
 pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
-import "../../services"
-import "../../utils"
+import qs.services
+import qs.utils
 
 Repeater {
 	id: list
