@@ -1,4 +1,5 @@
 //@ pragma IconTheme Papirus-Dark
+//@ pragma UseQApplication
 import qs.modules
 import qs.modules.background
 import qs.modules.dashboard

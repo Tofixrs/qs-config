@@ -21,7 +21,7 @@ Variants {
 		anchors.right: true
 		implicitHeight: 40
 		WrapperItem {
-			width: win.width
+			width: win.width - 10
 			height: win.implicitHeight - 10
 			anchors.centerIn: parent
 			margin: 5
@@ -58,6 +58,9 @@ Variants {
 				}
 				RowLayout {
 					Layout.alignment: Qt.AlignRight
+					Tray {
+						win: win
+					}
 				}
 			}
 		}
