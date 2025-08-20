@@ -4,6 +4,7 @@ import QtQuick
 import qs.services
 import qs.widgets
 import Quickshell.Bluetooth
+import Quickshell
 
 RowLayout {
 	id: root
@@ -31,11 +32,16 @@ RowLayout {
 					case BluetoothAdapterState.Enabling:
 					case BluetoothAdapterState.Disabling:
 						return "settings_bluetooth";
+					case BluetoothAdapterState.Blocked:
 					case BluetoothAdapterState.Disabled:
 						return "bluetooth_disabled";
 					}
 				}
 				onClicked: {
+					if (Bluetooth.defaultAdapter.state == BluetoothAdapterState.Blocked) {
+						Quickshell.execDetached(["rfkill", "unblock", "bluetooth"]);
+						return;
+					}
 					if (Bluetooth.defaultAdapter) {
 						Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled;
 					}
