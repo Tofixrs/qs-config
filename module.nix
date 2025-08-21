@@ -11,7 +11,7 @@
   inherit (lib.modules) mkIf;
   inherit (lib.options) mkEnableOption;
   cfg = config.programs.qs-config;
-  system = pkgs.stdenv.hostPlatform.system;
+  inherit (pkgs.stdenv.hostPlatform) system;
   packages = self.packages.${system};
   quickshell = inputs.quickshell.packages.${system}.default;
 in {
@@ -19,7 +19,7 @@ in {
     enable = mkEnableOption "qs-config";
   };
   config = mkIf cfg.enable {
-    home.packges = [
+    home.packages = [
       packages.qs-config
       quickshell
     ];
