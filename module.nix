@@ -23,6 +23,9 @@ in {
       packages.qs-config
       quickshell
     ];
+    home.sessionVariables = {
+      QS_CONFIG_PATH = "${packages.qs-config}";
+    };
     systemd.user.services.qs-config = {
       Unit = {
         PartOf = ["graphical-session.target"];
