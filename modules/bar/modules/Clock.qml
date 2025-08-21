@@ -13,7 +13,7 @@ Module {
 	}
 	Clock {
 		color: Theme.get().text
-		format: "hh:mm:ss"
+		format: "hh:mm:ss | dd MMM ddd"
 		Layout.alignment: Qt.AlignVCenter
 	}
 }
