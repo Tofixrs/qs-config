@@ -12,7 +12,7 @@
     self,
     filter,
     ...
-  }: let
+  } @ inputs: let
     systems = ["x86_64-linux" "aarch64-linux"];
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
@@ -25,7 +25,9 @@
       }
     );
     homeManagerModules = {
-      qs-config = import ./module.nix self;
+      qs-config = import ./module.nix {
+        inherit self inputs;
+      };
     };
   };
 }
