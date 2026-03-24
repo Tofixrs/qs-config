@@ -9,4 +9,10 @@ PanelWindow {
 	function toggle() {
 		Visibilities.toggle(screen.name, name);
 	}
+	function hide() {
+		Visibilities.set(screen.name, name, false);
+	}
+	function show() {
+		Visibilities.set(screen.name, name, true);
+	}
 }

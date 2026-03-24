@@ -1,21 +1,26 @@
-//@ pragma IconTheme Papirus-Dark
 //@ pragma UseQApplication
-import qs.modules
-import qs.modules.background
-import qs.modules.dashboard
+//@ pragma RespectSystemStyle
+//@ pragma IconTheme Papirus-Dark
+
+import Quickshell
 import qs.modules.appLauncher
 import qs.modules.bar
-import qs.modules.notifications
-import qs.modules.notifBoard
-import Quickshell
+import qs.modules
 
 ShellRoot {
-	Background {}
-	Bar {}
-	Calendar {}
-	Dashboard {}
-	PowerMenu {}
-	AppLauncher {}
-	Notifications {}
-	NotifBoard {}
+	Launcher {}
+	Variants {
+		model: Quickshell.screens
+
+		Scope {
+			id: s
+			property ShellScreen modelData
+			Wallpaper {
+				s: s.modelData
+			}
+			Bar {
+				s: s.modelData
+			}
+		}
+	}
 }

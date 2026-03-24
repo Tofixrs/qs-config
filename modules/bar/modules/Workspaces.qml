@@ -1,23 +1,22 @@
-pragma ComponentBehavior: Bound
-
-import QtQuick.Layouts
-import Quickshell.Hyprland
 import Quickshell
+import Quickshell.Hyprland
+import QtQuick.Layouts
 import QtQuick
-import qs.services
 import qs.widgets
+import qs.config
 
 Module {
 	id: root
 	required property ShellScreen monitor
 	property HyprlandMonitor hMonitor: Hyprland.monitorFor(root.monitor)
+	property var workspaces: Hyprland.workspaces.values.filter(ws => ws.monitor?.id == hMonitor?.id)
+
 	RowLayout {
 		Repeater {
-			model: Hyprland.workspaces
-			Loader {
+			model: root.workspaces
+			RowLayout {
 				id: ws
-				asynchronous: true
-				active: modelData?.id != null
+				required property HyprlandWorkspace modelData
 				function getState() {
 					if (root.hMonitor.id == modelData.monitor.id && modelData.active)
 						return "active";
@@ -30,11 +29,11 @@ Module {
 				function getColor() {
 					switch (getState()) {
 					case "active":
-						return Theme.getAccentColor();
+						return Theme.accent;
 					case "occupied":
-						return Theme.get().active;
+						return Theme.active;
 					default:
-						return Theme.get().inactive;
+						return Theme.inactive;
 					}
 				}
 				function getWidth() {
@@ -47,34 +46,28 @@ Module {
 						return 5;
 					}
 				}
-				required property HyprlandWorkspace modelData
-				sourceComponent: RowLayout {
-					MText {
-						text: ws.modelData.name
-					}
-					Rectangle {
-						id: wsIndicator
-						color: ws.getColor()
+				MText {
+					text: ws.modelData.name
+				}
+				Rectangle {
+					id: wsIndicator
+					color: ws.getColor()
 
-						implicitWidth: 5
-						implicitHeight: 5
-						radius: 5
+					implicitWidth: 5
+					implicitHeight: 5
+					radius: 5
 
-						PropertyAnimation {
-							id: widthAnim
-							target: wsIndicator
-							property: "implicitWidth"
-							to: ws.getWidth()
-							running: true
-							onRunningChanged: this.running = true
-							duration: 50
-						}
+					PropertyAnimation {
+						id: widthAnim
+						target: wsIndicator
+						property: "implicitWidth"
+						to: ws.getWidth()
+						running: true
+						onRunningChanged: this.running = true
+						duration: 50
 					}
 				}
 			}
 		}
-	}
-	Component.onCompleted: {
-		HyprlandPlus.fakePropToImport = true;
 	}
 }

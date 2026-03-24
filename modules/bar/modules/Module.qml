@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import qs.services
+import qs.config
 
 RowLayout {
 	id: root
@@ -18,8 +18,8 @@ RowLayout {
 		id: rect
 		Layout.fillHeight: true
 		implicitWidth: root.child.width + 20
-		color: mouseArea.containsMouse && root.button ? Theme.get().hover : Theme.get().background
-		radius: Theme.get().rounded
+		color: mouseArea.containsMouse && root.button ? Theme.hover : Theme.background
+		radius: Theme.rounded
 
 		MouseArea {
 			id: mouseArea

@@ -8,7 +8,6 @@ import Quickshell
 
 Module {
 	id: root
-	required property StyledWindow win
 	RowLayout {
 		Repeater {
 			model: SystemTray.items

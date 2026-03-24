@@ -6,26 +6,33 @@ import QtQuick
 
 Singleton {
 	id: root
-	property var screens: Quickshell.screens.reduce((acc, v) => {
-		acc[v.name] = {};
-		panels.forEach(p => {
-			acc[v.name][p] = false;
-		});
-		return acc;
-	}, {})
-	property list<string> panels: []
+	property var panels: []
 	function addPanel(name: string) {
-		panels.push(name);
+		root.panels[name] = false;
 	}
-	function toggle(screenName: string, panel: string) {
-		root.screens[screenName][panel] = !root.screens[screenName][panel];
-		root.screensChanged();
+	function toggle(panel: string) {
+		root.panels[panel] = !root.panels[panel];
+		root.panelsChanged();
+	}
+	function set(panel: string, yes: bool) {
+		root.panels[panel] = yes;
+		root.panelsChanged();
+	}
+
+	function is(panel: string): bool {
+		return root.panels[panel];
 	}
 
 	IpcHandler {
 		target: "panels"
-		function toggle(screenName: string, panel: string) {
-			root.toggle(screenName, panel);
+		function toggle(panel: string) {
+			root.toggle(panel);
+		}
+		function set(panel: string, yes: bool) {
+			root.set(panel, yes);
+		}
+		function is(panel: string): bool {
+			return root.is(panel);
 		}
 	}
 }

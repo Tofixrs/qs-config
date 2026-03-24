@@ -1,7 +1,7 @@
-import qs.services
+import qs.config
 import QtQuick
 
 Text {
-	color: Theme.get().text
-	font.family: Theme.get().font
+	color: Theme.text
+	font.family: Theme.font
 }

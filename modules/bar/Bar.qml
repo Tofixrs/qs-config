@@ -1,67 +1,45 @@
 import qs.widgets
-import qs.services
-import "./modules"
 import Quickshell
+import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Widgets
+import qs.modules.bar.modules
 
-Variants {
-	model: Quickshell.screens
+PWindow {
+	id: win
+	required property ShellScreen s
+	screen: s
+	name: "bar"
 
-	StyledWindow {
-		id: win
+	anchors.bottom: true
+	anchors.left: true
+	anchors.right: true
+	implicitHeight: 40
+	WrapperItem {
+		width: win.width - 10
+		height: win.implicitHeight - 10
+		anchors.centerIn: parent
+		margin: 5
 
-		required property ShellScreen modelData
-		screen: modelData
-		name: "bar"
+		GridLayout {
+			columns: 3
+			rows: 1
+			anchors.fill: parent
+			uniformCellWidths: true
 
-		anchors.bottom: true
-		anchors.left: true
-		anchors.right: true
-		implicitHeight: 40
-		WrapperItem {
-			width: win.width - 10
-			height: win.implicitHeight - 10
-			anchors.centerIn: parent
-			margin: 5
-
-			GridLayout {
-				columns: 3
-				rows: 1
-				anchors.fill: parent
-				uniformCellWidths: true
-				RowLayout {
-					Clock {
-						s: win.modelData
-					}
+			RowLayout {
+				Clock {}
+			}
+			RowLayout {
+				Layout.alignment: Qt.AlignCenter
+				Workspaces {
+					monitor: win.s
 				}
-				RowLayout {
-					Layout.alignment: Qt.AlignHCenter
-					Module {
-						button: true
-						onClick: Visibilities.toggle(win.modelData.name, "dashboard")
-						MText {
-							text: ""
-						}
-					}
-					Workspaces {
-						monitor: win.modelData
-					}
-					Module {
-						button: true
-						onClick: Visibilities.toggle(win.modelData.name, "notifBoard")
-						MText {
-							text: ""
-						}
-					}
-				}
-				RowLayout {
-					Layout.alignment: Qt.AlignRight
-					Tray {
-						win: win
-					}
-				}
+			}
+			RowLayout {
+				Layout.alignment: Qt.AlignRight
+				Status {}
+				Tray {}
 			}
 		}
 	}

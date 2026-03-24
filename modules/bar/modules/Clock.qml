@@ -3,16 +3,12 @@ import QtQuick
 import QtQuick.Layouts
 import qs.widgets
 import qs.services
+import qs.config
 
 Module {
-	required property ShellScreen s
 	button: true
-	cursorShape: Qt.PointingHandCursor
-	onClick: {
-		Visibilities.toggle(s.name, "calendar");
-	}
 	Clock {
-		color: Theme.get().text
+		color: Theme.text
 		format: "hh:mm:ss | dd MMM ddd"
 		Layout.alignment: Qt.AlignVCenter
 	}
