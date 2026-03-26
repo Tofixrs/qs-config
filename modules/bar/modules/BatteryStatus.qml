@@ -70,10 +70,7 @@ RowLayout {
 			}
 		}
 	}
-	MouseArea {
-		anchors.fill: parent
-		hoverEnabled: true
-		onEntered: showBatteryText = true
-		onExited: showBatteryText = false
+	HoverHandler {
+		onHoveredChanged: showBatteryText = hovered
 	}
 }

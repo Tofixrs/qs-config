@@ -32,9 +32,11 @@ PWindow {
 			}
 			RowLayout {
 				Layout.alignment: Qt.AlignCenter
+				HomeButton {}
 				Workspaces {
 					monitor: win.s
 				}
+				NotificationButton {}
 			}
 			RowLayout {
 				Layout.alignment: Qt.AlignRight

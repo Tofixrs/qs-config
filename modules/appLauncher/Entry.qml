@@ -7,4 +7,5 @@ QtObject {
 	required property string icon
 	required property int mode
 	required property SelectionCallback selectionCallback
+	property string iconType: "system"
 }

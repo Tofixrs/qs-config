@@ -56,10 +56,7 @@ RowLayout {
 			}
 		}
 	}
-	MouseArea {
-		anchors.fill: parent
-		hoverEnabled: true
-		onEntered: showNetworkText = true
-		onExited: showNetworkText = false
+	HoverHandler {
+		onHoveredChanged: showNetworkText = hovered
 	}
 }

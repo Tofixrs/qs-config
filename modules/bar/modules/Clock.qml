@@ -7,9 +7,14 @@ import qs.config
 
 Module {
 	button: true
+
 	Clock {
 		color: Theme.text
 		format: "hh:mm:ss | dd MMM ddd"
 		Layout.alignment: Qt.AlignVCenter
+	}
+
+	onClick: {
+		Visibilities.toggle("calendar");
 	}
 }

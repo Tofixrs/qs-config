@@ -8,6 +8,7 @@ import qs.widgets
 
 Module {
 	RowLayout {
+		VolumeStatus {}
 		BatteryStatus {}
 		NetworkStatus {}
 		BluetoothStatus {}

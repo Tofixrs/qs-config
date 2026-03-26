@@ -43,7 +43,10 @@ PWindow {
 		id: calcProvider
 		input: input.text
 	}
-	readonly property list<Entry> entries: [...appProvider.instances, ...modeProvider.instances, calcProvider].sort((a, b) => {
+	PowerActions {
+		id: powerActions
+	}
+	readonly property list<Entry> entries: [...appProvider.instances, ...modeProvider.instances, ...powerActions.instances, calcProvider].sort((a, b) => {
 		if (a.mode != b.mode) {
 			return a.mode - b.mode;
 		}
@@ -112,6 +115,18 @@ PWindow {
 							if (event.key == Qt.Key_Escape) {
 								root.hide();
 							}
+							if (event.key == Qt.Key_Up) {
+								root.focusedEntry--;
+								if (root.focusedEntry < 0) {
+									root.focusedEntry = 0;
+								}
+							}
+							if (event.key == Qt.Key_Down) {
+								root.focusedEntry++;
+								if (root.focusedEntry >= filteredEntries.length) {
+									root.focusedEntry = 0;
+								}
+							}
 							if (event.key == Qt.Key_Tab) {
 								root.focusedEntry++;
 								if (root.focusedEntry >= filteredEntries.length) {
@@ -143,18 +158,24 @@ PWindow {
 							anchors.leftMargin: 10
 							spacing: 5
 							Image {
-								visible: modelData.icon != ""
+								visible: modelData.icon != "" && modelData.iconType == "system"
 								source: Quickshell.iconPath(modelData.icon, "image-missing")
 								Layout.preferredHeight: text.implicitHeight
 								Layout.preferredWidth: text.implicitHeight
 
 								fillMode: Image.PreserveAspectFit
 							}
+							MaterialIcon {
+								visible: modelData.icon != "" && modelData.iconType == "material"
+								font.pointSize: Math.max(1, text.implicitHeight)
+								text: modelData.icon
+							}
 							Text {
 								id: text
 								text: modelData.name
 								font.pointSize: 15
 								color: Theme.text
+								Layout.maximumWidth: 10
 							}
 						}
 					}
@@ -165,5 +186,6 @@ PWindow {
 
 	Component.onCompleted: {
 		Visibilities.addPanel(root.name);
+		LauncherService.register(root);
 	}
 }

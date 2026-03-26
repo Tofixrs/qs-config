@@ -64,10 +64,7 @@ RowLayout {
 			}
 		}
 	}
-	MouseArea {
-		anchors.fill: parent
-		hoverEnabled: true
-		onEntered: showBluetoothText = true
-		onExited: showBluetoothText = false
+	HoverHandler {
+		onHoveredChanged: showBluetoothText = hovered
 	}
 }
