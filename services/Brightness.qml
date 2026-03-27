@@ -32,19 +32,7 @@ Singleton {
 		const rawValue = Math.round(clamped * root.maxBrightnessRaw);
 		root.lastError = "";
 
-		setBrightnessProc.command = [
-			"busctl",
-			"--system",
-			"call",
-			"org.freedesktop.login1",
-			"/org/freedesktop/login1/session/auto",
-			"org.freedesktop.login1.Session",
-			"SetBrightness",
-			"ssu",
-			"backlight",
-			root.deviceName,
-			`${rawValue}`
-		];
+		setBrightnessProc.command = ["busctl", "--system", "call", "org.freedesktop.login1", "/org/freedesktop/login1/session/auto", "org.freedesktop.login1.Session", "SetBrightness", "ssu", "backlight", root.deviceName, `${rawValue}`];
 		setBrightnessProc.running = true;
 	}
 
@@ -54,6 +42,15 @@ Singleton {
 
 	Component.onCompleted: {
 		refresh();
+	}
+	IpcHandler {
+		target: "brightness"
+		function change(delta: real) {
+			root.changeBrightness(delta)
+		}
+		function set(value: real) {
+			root.setBrightness(delta)
+		}
 	}
 
 	Timer {
