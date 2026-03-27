@@ -42,17 +42,17 @@ Variants {
 			closeLauncher: true
 			function callback() {
 				switch (modelData.action) {
-					case Shutdown:
-						Quickshell.execDetached(["systemctl", "poweroff"]);
+				case PowerActions.Actions.Shutdown:
+					Quickshell.execDetached(["systemctl", "poweroff"]);
 					break;
-					case Sleep:
-						Quickshell.execDetached(["systemctl", "suspend"]);
+				case PowerActions.Actions.Sleep:
+					Quickshell.execDetached(["systemctl", "suspend"]);
 					break;
-					case Reboot:
-						Quickshell.execDetached(["systemctl", "reboot"]);
+				case PowerActions.Actions.Reboot:
+					Quickshell.execDetached(["systemctl", "reboot"]);
 					break;
-					case Logout:
-						Quickshell.execDetached(["bash", "-c", `loginctl -- kill-session $(loginctl --json=short list-sessions | jq '.[] | select(.class == "user") | .session' -r)`]);
+				case PowerActions.Actions.Logout:
+					Quickshell.execDetached(["bash", "-c", `loginctl -- kill-session $(loginctl --json=short list-sessions | jq '.[] | select(.class == "user") | .session' -r)`]);
 					break;
 				}
 			}
