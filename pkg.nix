@@ -8,7 +8,7 @@ stdenvNoCC.mkDerivation {
   phases = ["installPhase"];
   src = filter {
     root = ./.;
-    include = ["modules" "scripts" "services" "utils" "widgets" "shell.qml" "utils.js"];
+    include = ["modules" "scripts" "services" "utils" "widgets" "shell.qml" "utils.js" "config"];
   };
   installPhase = ''
     mkdir -p $out
