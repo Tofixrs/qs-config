@@ -64,6 +64,27 @@ Window {
 		return Math.max(minValue, Math.min(maxValue, value));
 	}
 
+	function monitorScaleValue(monitor: var): real {
+		if (!monitor)
+			return 1;
+		const scale = Number(monitor.scale);
+		return isNaN(scale) || scale <= 0 ? 1 : scale;
+	}
+
+	function monitorLogicalWidth(monitor: var): real {
+		if (!monitor)
+			return 320;
+		const width = Math.max(Number(monitor.width) || 0, 320);
+		return width / root.monitorScaleValue(monitor);
+	}
+
+	function monitorLogicalHeight(monitor: var): real {
+		if (!monitor)
+			return 180;
+		const height = Math.max(Number(monitor.height) || 0, 180);
+		return height / root.monitorScaleValue(monitor);
+	}
+
 	function rectsOverlap(a: var, b: var): bool {
 		return a.x < (b.x + b.width) && (a.x + a.width) > b.x && a.y < (b.y + b.height) && (a.y + a.height) > b.y;
 	}
@@ -79,8 +100,8 @@ Window {
 				height: 180
 			};
 
-		const width = Math.max(current.width, 320);
-		const height = Math.max(current.height, 180);
+		const width = root.monitorLogicalWidth(current);
+		const height = root.monitorLogicalHeight(current);
 		return {
 			x: Math.round(root.clamp(x, root.workspaceMinX, root.workspaceMaxX - width)),
 			y: Math.round(root.clamp(y, root.workspaceMinY, root.workspaceMaxY - height)),
@@ -99,8 +120,8 @@ Window {
 			const other = {
 				x: draft.x,
 				y: draft.y,
-				width: Math.max(draft.width, 320),
-				height: Math.max(draft.height, 180)
+				width: root.monitorLogicalWidth(draft),
+				height: root.monitorLogicalHeight(draft)
 			};
 			if (root.rectsOverlap(moving, other))
 				return true;
@@ -128,8 +149,8 @@ Window {
 			const other = {
 				x: draft.x,
 				y: draft.y,
-				width: Math.max(draft.width, 320),
-				height: Math.max(draft.height, 180)
+				width: root.monitorLogicalWidth(draft),
+				height: root.monitorLogicalHeight(draft)
 			};
 
 			const verticalAligned = root.rangesIntersect(snapped.y, snapped.y + snapped.height, other.y, other.y + other.height, root.snapThreshold);
@@ -468,7 +489,7 @@ Window {
 							}
 
 							MText {
-								text: "Drag displays to update X/Y"
+								text: "Left drag moves displays, middle drag pans"
 								font.pointSize: 10
 								color: Theme.inactive
 							}
@@ -493,8 +514,14 @@ Window {
 									anchors.fill: parent
 									anchors.margins: 14
 									property real scaleFactor: root.previewScale(width, height)
-									property real offsetX: (width - (root.workspaceWidth * scaleFactor)) / 2
-									property real offsetY: (height - (root.workspaceHeight * scaleFactor)) / 2
+									property real panOffsetX: 0
+									property real panOffsetY: 0
+									property real panStartMouseX: 0
+									property real panStartMouseY: 0
+									property real panStartOffsetX: 0
+									property real panStartOffsetY: 0
+									property real offsetX: ((width - (root.workspaceWidth * scaleFactor)) / 2) + panOffsetX
+									property real offsetY: ((height - (root.workspaceHeight * scaleFactor)) / 2) + panOffsetY
 
 									Rectangle {
 										x: previewCanvas.offsetX
@@ -525,6 +552,27 @@ Window {
 										opacity: 0.5
 									}
 
+									MouseArea {
+										id: panArea
+										anchors.fill: parent
+										z: 1
+										acceptedButtons: Qt.MiddleButton
+										preventStealing: true
+										cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+										onPressed: mouse => {
+											previewCanvas.panStartMouseX = mouse.x;
+											previewCanvas.panStartMouseY = mouse.y;
+											previewCanvas.panStartOffsetX = previewCanvas.panOffsetX;
+											previewCanvas.panStartOffsetY = previewCanvas.panOffsetY;
+										}
+										onPositionChanged: mouse => {
+											if (!pressed)
+												return;
+											previewCanvas.panOffsetX = previewCanvas.panStartOffsetX + (mouse.x - previewCanvas.panStartMouseX);
+											previewCanvas.panOffsetY = previewCanvas.panStartOffsetY + (mouse.y - previewCanvas.panStartMouseY);
+										}
+									}
+
 									Repeater {
 										model: MonitorProfiles.monitorDrafts
 
@@ -535,8 +583,8 @@ Window {
 											property real dragStartCanvasY: 0
 											property real startMonitorX: 0
 											property real startMonitorY: 0
-											property real previewWidth: Math.max(72, (modelData.width > 0 ? modelData.width : 320) * previewCanvas.scaleFactor)
-											property real previewHeight: Math.max(48, (modelData.height > 0 ? modelData.height : 180) * previewCanvas.scaleFactor)
+											property real previewWidth: Math.max(72, root.monitorLogicalWidth(modelData) * previewCanvas.scaleFactor)
+											property real previewHeight: Math.max(48, root.monitorLogicalHeight(modelData) * previewCanvas.scaleFactor)
 											property real previewX: previewCanvas.offsetX + ((modelData.x - root.workspaceMinX) * previewCanvas.scaleFactor)
 											property real previewY: previewCanvas.offsetY + ((modelData.y - root.workspaceMinY) * previewCanvas.scaleFactor)
 
@@ -607,7 +655,7 @@ Window {
 
 												MText {
 													width: parent.width
-													text: `${modelData.width}x${modelData.height}`
+													text: `${modelData.width}x${modelData.height} @ ${root.monitorScaleValue(modelData)}x`
 													font.pointSize: 9
 													color: root.selectedMonitorName === modelData.name ? Theme.background : Theme.inactive
 													horizontalAlignment: Text.AlignHCenter
@@ -618,6 +666,8 @@ Window {
 											MouseArea {
 												id: dragArea
 												anchors.fill: parent
+												z: 2
+												acceptedButtons: Qt.LeftButton
 												preventStealing: true
 												cursorShape: Qt.OpenHandCursor
 												onPressed: {
