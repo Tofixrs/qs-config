@@ -28,6 +28,33 @@ PWindow {
 		cardBorderColor: Theme.hover
 		padding: 16
 		contentSpacing: 14
+		property real revealOffset: root.visible ? 0 : root.implicitHeight
+		opacity: root.visible ? 1 : 0
+		scale: root.visible ? 1 : 0.97
+		transform: Translate {
+			y: dashboardCard.revealOffset
+		}
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on scale {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on revealOffset {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
 
 		ColumnLayout {
 			id: content
@@ -55,6 +82,12 @@ PWindow {
 
 				Item {
 					Layout.fillWidth: true
+				}
+
+				PillButton {
+					text: "Monitors"
+					baseColor: Theme.foreground2
+					onClick: Visibilities.set("monitorProfiles", true)
 				}
 
 				IconButton {

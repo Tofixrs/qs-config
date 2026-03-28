@@ -12,6 +12,7 @@ ShellRoot {
 	Dashboard {}
 	Calendar {}
 	Notifications {}
+	MonitorProfilesWindow {}
 	Variants {
 		model: Quickshell.screens
 

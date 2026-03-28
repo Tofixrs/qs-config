@@ -32,6 +32,33 @@ PWindow {
 		cardBorderColor: Theme.hover
 		padding: 16
 		contentSpacing: 12
+		property real revealOffset: root.visible ? 0 : -root.implicitWidth
+		opacity: root.visible ? 1 : 0
+		scale: root.visible ? 1 : 0.97
+		transform: Translate {
+			x: card.revealOffset
+		}
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on scale {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on revealOffset {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
 
 		ColumnLayout {
 			spacing: 10
@@ -132,6 +159,19 @@ PWindow {
 					border.color: Theme.accent
 					border.width: model.today ? 2 : 0
 					radius: Theme.rounded
+
+					Behavior on color {
+						ColorAnimation {
+							duration: Theme.motionFast
+						}
+					}
+
+					Behavior on border.width {
+						NumberAnimation {
+							duration: Theme.motionFast
+							easing.type: Easing.OutCubic
+						}
+					}
 					MText {
 						id: text
 						anchors.centerIn: parent

@@ -70,9 +70,26 @@ PWindow {
 	}).slice(0, shownEntries)
 
 	Rectangle {
+		id: launcherCard
 		color: Theme.background
 		anchors.fill: parent
 		radius: Theme.rounded
+		opacity: root.visible ? 1 : 0
+		scale: root.visible ? 1 : 0.97
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on scale {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
 		WrapperItem {
 			id: wrap
 			anchors.fill: parent
@@ -86,6 +103,13 @@ PWindow {
 					implicitHeight: input.implicitHeight + 20
 					color: Theme.foreground2
 					radius: Theme.rounded
+
+					Behavior on color {
+						ColorAnimation {
+							duration: Theme.motionFast
+						}
+					}
+
 					TextInput {
 						id: input
 						anchors.fill: parent
@@ -145,10 +169,40 @@ PWindow {
 						anchors.right: content.right
 						implicitHeight: entryContent.implicitHeight + 16
 						radius: Theme.rounded
+						opacity: 0
+						x: 10
 
 						required property Entry modelData
 						required property int index
 						color: index == root.focusedEntry ? Theme.hover : Theme.foreground
+
+						Behavior on color {
+							ColorAnimation {
+								duration: Theme.motionFast
+							}
+						}
+
+						Component.onCompleted: entryEnter.restart()
+
+						ParallelAnimation {
+							id: entryEnter
+							NumberAnimation {
+								target: item
+								property: "opacity"
+								from: 0
+								to: 1
+								duration: Theme.motionBase + (index * 14)
+								easing.type: Easing.OutCubic
+							}
+							NumberAnimation {
+								target: item
+								property: "x"
+								from: 10
+								to: 0
+								duration: Theme.motionBase + (index * 14)
+								easing.type: Easing.OutCubic
+							}
+						}
 
 						RowLayout {
 							id: entryContent

@@ -27,6 +27,33 @@ PWindow {
 		cardBorderColor: Theme.hover
 		padding: 16
 		contentSpacing: 14
+		property real revealOffset: root.visible ? 0 : root.implicitHeight
+		opacity: root.visible ? 1 : 0
+		scale: root.visible ? 1 : 0.97
+		transform: Translate {
+			y: notificationCard.revealOffset
+		}
+
+		Behavior on opacity {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on scale {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
+
+		Behavior on revealOffset {
+			NumberAnimation {
+				duration: Theme.motionBase
+				easing.type: Easing.OutCubic
+			}
+		}
 
 		ColumnLayout {
 			Layout.fillWidth: true
@@ -99,9 +126,34 @@ PWindow {
 							model: Notifications.notifications
 
 							delegate: NotificationCard {
+								id: notificationEntry
 								required property var modelData
 								width: viewport.width
 								notification: modelData
+								opacity: 0
+								y: 10
+
+								Component.onCompleted: appear.restart()
+
+								ParallelAnimation {
+									id: appear
+									NumberAnimation {
+										target: notificationEntry
+										property: "opacity"
+										from: 0
+										to: 1
+										duration: Theme.motionBase
+										easing.type: Easing.OutCubic
+									}
+									NumberAnimation {
+										target: notificationEntry
+										property: "y"
+										from: 10
+										to: 0
+										duration: Theme.motionBase
+										easing.type: Easing.OutCubic
+									}
+								}
 							}
 						}
 					}

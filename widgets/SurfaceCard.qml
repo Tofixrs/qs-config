@@ -19,6 +19,32 @@ Rectangle {
 	border.width: cardBorderWidth
 	implicitHeight: contentLayout.implicitHeight + (padding * 2)
 
+	Behavior on color {
+		ColorAnimation {
+			duration: Theme.motionBase
+		}
+	}
+
+	Behavior on border.color {
+		ColorAnimation {
+			duration: Theme.motionBase
+		}
+	}
+
+	Behavior on border.width {
+		NumberAnimation {
+			duration: Theme.motionFast
+			easing.type: Easing.OutCubic
+		}
+	}
+
+	Behavior on implicitHeight {
+		NumberAnimation {
+			duration: Theme.motionBase
+			easing.type: Easing.OutCubic
+		}
+	}
+
 	ColumnLayout {
 		id: contentLayout
 		anchors.fill: parent

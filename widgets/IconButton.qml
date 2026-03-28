@@ -17,6 +17,20 @@ Rectangle {
 	implicitHeight: diameter
 	radius: diameter / 2
 	color: mouseArea.containsMouse ? Theme.hover : Theme.background
+	scale: mouseArea.pressed ? 0.94 : (mouseArea.containsMouse ? Theme.motionOvershoot : 1)
+
+	Behavior on color {
+		ColorAnimation {
+			duration: Theme.motionFast
+		}
+	}
+
+	Behavior on scale {
+		NumberAnimation {
+			duration: Theme.motionFast
+			easing.type: Easing.OutCubic
+		}
+	}
 
 	MaterialIcon {
 		anchors.centerIn: parent

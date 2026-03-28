@@ -28,7 +28,15 @@ SurfaceCard {
 			id: contentColumn
 			Layout.fillWidth: true
 			spacing: 8
-			visible: root.expanded
+			opacity: root.expanded ? 1 : 0
+			visible: opacity > 0
+
+			Behavior on opacity {
+				NumberAnimation {
+					duration: Theme.motionBase
+					easing.type: Easing.OutCubic
+				}
+			}
 		}
 	}
 }

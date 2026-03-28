@@ -41,6 +41,20 @@ SurfaceCard {
 	padding: 12
 	contentSpacing: 10
 	clip: true
+	scale: 1
+
+	Behavior on cardBorderColor {
+		ColorAnimation {
+			duration: Theme.motionFast
+		}
+	}
+
+	Behavior on scale {
+		NumberAnimation {
+			duration: Theme.motionFast
+			easing.type: Easing.OutCubic
+		}
+	}
 
 	function urgencyColor(): color {
 		if (!root.notification)
@@ -188,8 +202,6 @@ SurfaceCard {
 						text: root.notification.summary || root.notification.appName || "Notification"
 						font.pointSize: 11
 						wrapMode: Text.Wrap
-						maximumLineCount: 1
-						elide: Text.ElideRight
 					}
 
 					MText {

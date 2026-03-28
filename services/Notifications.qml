@@ -10,6 +10,7 @@ Singleton {
 	property var notifications: []
 	readonly property int count: root.notifications.length
 	property var popupNotifications: []
+	property var animatedPopups: []
 	property int popupDuration: 5000
 
 	function trackNotification(notification): void {
@@ -47,6 +48,7 @@ Singleton {
 			root.removeNotification(notification);
 		}
 		root.popupNotifications = [];
+		root.animatedPopups = [];
 	}
 
 	function showPopup(notification): void {
@@ -54,15 +56,27 @@ Singleton {
 			return;
 		if (root.popupNotifications.includes(notification))
 			root.hidePopup(notification);
-		root.popupNotifications = [...root.popupNotifications, notification];
+		root.popupNotifications = [notification, ...root.popupNotifications];
+	}
+
+	function hasAnimatedPopup(notification): bool {
+		return !!notification && root.animatedPopups.includes(notification);
+	}
+
+	function markPopupAnimated(notification): void {
+		if (!notification || root.animatedPopups.includes(notification))
+			return;
+		root.animatedPopups = [...root.animatedPopups, notification];
 	}
 
 	function hidePopup(notification = null): void {
 		if (!notification) {
 			root.popupNotifications = [];
+			root.animatedPopups = [];
 			return;
 		}
 		root.popupNotifications = root.popupNotifications.filter(value => value !== notification);
+		root.animatedPopups = root.animatedPopups.filter(value => value !== notification);
 	}
 
 	NotificationServer {

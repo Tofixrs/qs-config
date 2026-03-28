@@ -21,6 +21,28 @@ Rectangle {
 	implicitHeight: label.implicitHeight + (verticalPadding * 2)
 	radius: implicitHeight / 2
 	color: mouseArea.containsMouse ? Theme.hover : (disabled ? disabledColor : (active ? activeColor : baseColor))
+	scale: mouseArea.pressed ? 0.97 : (mouseArea.containsMouse && !disabled ? Theme.motionOvershoot : 1)
+	opacity: disabled ? 0.68 : 1
+
+	Behavior on color {
+		ColorAnimation {
+			duration: Theme.motionFast
+		}
+	}
+
+	Behavior on scale {
+		NumberAnimation {
+			duration: Theme.motionFast
+			easing.type: Easing.OutCubic
+		}
+	}
+
+	Behavior on opacity {
+		NumberAnimation {
+			duration: Theme.motionFast
+			easing.type: Easing.OutCubic
+		}
+	}
 
 	MText {
 		id: label
