@@ -2,8 +2,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import Quickshell
-import Quickshell.Wayland
 import qs.widgets
 import qs.services
 import qs.config
@@ -196,7 +194,6 @@ Window {
 		}
 
 		ColumnLayout {
-			anchors.fill: parent
 			spacing: 12
 
 			RowLayout {

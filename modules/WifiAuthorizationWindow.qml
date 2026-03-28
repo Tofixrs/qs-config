@@ -16,7 +16,7 @@ PWindow {
 	property real contentHeight: contentLayout ? contentLayout.implicitHeight : 0
 	property real contentWidth: contentLayout ? contentLayout.implicitWidth : 0
 	implicitWidth: Math.max(360, contentWidth + 32)
-	implicitHeight: Math.max(260, contentHeight + 32)
+	implicitHeight: Math.max(150, contentHeight + 32)
 	visible: WifiAuthorization.visible
 	focusable: true
 	exclusionMode: ExclusionMode.Ignore
@@ -35,7 +35,8 @@ PWindow {
 
 		ColumnLayout {
 			id: contentLayout
-			anchors.fill: parent
+			Layout.fillWidth: true
+			Layout.fillHeight: true
 			spacing: 10
 
 			MText {

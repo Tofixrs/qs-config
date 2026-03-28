@@ -59,7 +59,9 @@ PWindow {
 
 	property list<Entry> filteredEntries: root.entries.filter(v => {
 		if (v.mode == Mode.calc && root.mode == Mode.all)
-			return true;
+			return v.name.trim().length > 0;
+		if (v.mode == Mode.calc && v.name.trim().length == 0)
+			return false;
 		const name = v.name.toLowerCase();
 		const t = input.text.toLowerCase();
 		if (t[0] == ">" && root.mode == Mode.all) {
