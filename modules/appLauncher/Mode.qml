@@ -7,4 +7,6 @@ Singleton {
 	readonly property int calc: 2
 	readonly property int apps: 3
 	readonly property int powerActions: 4
+	readonly property int emoji: 5
+	readonly property int clipboard: 6
 }

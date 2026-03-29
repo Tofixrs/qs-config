@@ -74,7 +74,7 @@ PWindow {
 					}
 
 					MText {
-						text: "Wireless controls"
+						text: "System and media controls"
 						color: Theme.inactive
 						font.pointSize: 10
 					}
@@ -98,6 +98,7 @@ PWindow {
 				}
 			}
 
+			MediaSection {}
 			BrightnessSection {}
 			VolumeSection {}
 			WifiSection {}

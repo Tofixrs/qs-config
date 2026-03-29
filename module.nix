@@ -22,9 +22,11 @@ in {
     home.packages = [
       packages.qs-config
       quickshell
+      pkgs.cliphist
     ];
+    xdg.configFile."shell/src".source = packages.qs-config;
     home.sessionVariables = {
-      QS_CONFIG_PATH = "${packages.qs-config}";
+      QS_CONFIG_PATH = "${config.xdg.configHome}/shell/src";
     };
     systemd.user.services.qs-config = {
       Unit = {
@@ -32,7 +34,7 @@ in {
         After = ["graphical-session-pre.target"];
       };
       Service = {
-        ExecStart = "${quickshell}/bin/qs -p ${packages.qs-config}";
+        ExecStart = "${quickshell}/bin/qs -p ${config.xdg.configHome}/shell/src";
         Restart = "on-failure";
       };
       Install = {

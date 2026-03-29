@@ -10,6 +10,7 @@ Variants {
 		name: modelData.name
 		icon: modelData.icon
 		mode: Mode.apps
+		usageId: `app:${modelData.id}`
 		selectionCallback: SelectionCallback {
 			closeLauncher: true
 			callback: () => {

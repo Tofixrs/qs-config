@@ -4,8 +4,6 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Wayland
-import qs.modules.appLauncher.providers
-import Quickshell.Hyprland
 import qs.services
 import qs.widgets
 import Quickshell.Widgets
@@ -20,56 +18,9 @@ PWindow {
 	implicitHeight: content.implicitHeight + wrap.margin * 2
 	WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 	focusable: true
-	name: "appLauncher"
-
-	property int mode: Mode.all
-	property int focusedEntry: 0
-	property int shownEntries: 10
+	name: LauncherService.panelName
 	visible: Visibilities.is(root.name)
-
-	function hide() {
-		focusedEntry = 0;
-		input.text = "";
-		mode = Mode.all;
-		Visibilities.set(root.name, false);
-	}
-	Apps {
-		id: appProvider
-	}
-	Modes {
-		id: modeProvider
-	}
-	Calc {
-		id: calcProvider
-		input: input.text
-	}
-	PowerActions {
-		id: powerActions
-	}
-	readonly property list<Entry> entries: [...appProvider.instances, ...modeProvider.instances, ...powerActions.instances, calcProvider].sort((a, b) => {
-		if (a.mode != b.mode) {
-			return a.mode - b.mode;
-		}
-		if (input.text != "" && a.name.toLowerCase().startsWith(input.text.toLowerCase()))
-			return -1;
-		if (input.text != "" && b.name.toLowerCase().startsWith(input.text.toLowerCase()))
-			return 1;
-		return a.name.localeCompare(b.name);
-	})
-
-	property list<Entry> filteredEntries: root.entries.filter(v => {
-		if (v.mode == Mode.calc && root.mode == Mode.all)
-			return v.name.trim().length > 0;
-		if (v.mode == Mode.calc && v.name.trim().length == 0)
-			return false;
-		const name = v.name.toLowerCase();
-		const t = input.text.toLowerCase();
-		if (t[0] == ">" && root.mode == Mode.all) {
-			return v.mode == Mode.modes && name.includes(t.slice(1));
-		}
-
-		return (v.mode == root.mode || root.mode == Mode.all) && name.includes(t);
-	}).slice(0, shownEntries)
+	readonly property int entryIconSize: 22
 
 	Rectangle {
 		id: launcherCard
@@ -122,49 +73,30 @@ PWindow {
 						font.pointSize: 15
 						focus: true
 						color: Theme.text
+						text: LauncherService.query
+						onTextEdited: LauncherService.query = text
 						Keys.onPressed: event => {
 							if (event.key == Qt.Key_Return) {
-								const selected = entries.itemAt(root.focusedEntry);
-								const cb = selected.modelData.selectionCallback;
-
-								if (cb.swapToMode != null) {
-									root.mode = cb.swapToMode;
-									input.text = "";
-								}
-								if (cb.callback != null) {
-									cb.callback();
-								}
-								if (cb.closeLauncher) {
-									root.hide();
-								}
+								LauncherService.activateFocused();
 							}
 							if (event.key == Qt.Key_Escape) {
-								root.hide();
+								LauncherService.hide();
 							}
 							if (event.key == Qt.Key_Up) {
-								root.focusedEntry--;
-								if (root.focusedEntry < 0) {
-									root.focusedEntry = 0;
-								}
+								LauncherService.moveFocus(-1);
 							}
 							if (event.key == Qt.Key_Down) {
-								root.focusedEntry++;
-								if (root.focusedEntry >= filteredEntries.length) {
-									root.focusedEntry = 0;
-								}
+								LauncherService.moveFocus(1);
 							}
 							if (event.key == Qt.Key_Tab) {
-								root.focusedEntry++;
-								if (root.focusedEntry >= filteredEntries.length) {
-									root.focusedEntry = 0;
-								}
+								LauncherService.moveFocus(1);
 							}
 						}
 					}
 				}
 				Repeater {
 					id: entries
-					model: filteredEntries
+					model: LauncherService.filteredEntries
 					Rectangle {
 						id: item
 						anchors.left: content.left
@@ -176,7 +108,7 @@ PWindow {
 
 						required property Entry modelData
 						required property int index
-						color: index == root.focusedEntry ? Theme.hover : Theme.foreground
+						color: index == LauncherService.focusedEntry ? Theme.hover : Theme.foreground
 
 						Behavior on color {
 							ColorAnimation {
@@ -211,19 +143,21 @@ PWindow {
 							anchors.top: parent.top
 							anchors.bottom: parent.bottom
 							anchors.left: parent.left
+							anchors.right: parent.right
 							anchors.leftMargin: 10
+							anchors.rightMargin: 10
 							spacing: 5
 							Image {
 								visible: modelData.icon != "" && modelData.iconType == "system"
 								source: Quickshell.iconPath(modelData.icon, "image-missing")
-								Layout.preferredHeight: text.implicitHeight
-								Layout.preferredWidth: text.implicitHeight
+								Layout.preferredHeight: root.entryIconSize
+								Layout.preferredWidth: root.entryIconSize
 
 								fillMode: Image.PreserveAspectFit
 							}
 							MaterialIcon {
 								visible: modelData.icon != "" && modelData.iconType == "material"
-								font.pointSize: Math.max(1, text.implicitHeight)
+								font.pointSize: root.entryIconSize
 								text: modelData.icon
 							}
 							Text {
@@ -231,7 +165,9 @@ PWindow {
 								text: modelData.name
 								font.pointSize: 15
 								color: Theme.text
-								Layout.maximumWidth: 10
+								wrapMode: Text.Wrap
+								clip: true
+								Layout.fillWidth: true
 							}
 						}
 					}
@@ -242,6 +178,5 @@ PWindow {
 
 	Component.onCompleted: {
 		Visibilities.addPanel(root.name);
-		LauncherService.register(root);
 	}
 }
