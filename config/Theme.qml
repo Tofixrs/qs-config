@@ -14,8 +14,7 @@ Singleton {
 	property string text: "#cdd6f4"
 	property real rounded: 10
 	property string font: "JetBrainsMono Nerd Font"
-	property int motionFast: 250
-	property int motionBase: 300
-	property int motionSlow: 500
+	property int motionFast: 100
+	property int motionBase: 150
 	property real motionOvershoot: 1.03
 }
