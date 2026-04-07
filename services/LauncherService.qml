@@ -16,7 +16,7 @@ Singleton {
 	property string query: ""
 	property var usageCounts: ({})
 	property list<string> knownUnitTokens: ["mm", "millimeter", "millimeters", "cm", "centimeter", "centimeters", "m", "meter", "meters", "km", "kilometer", "kilometers", "in", "inch", "inches", "ft", "foot", "feet", "yd", "yard", "yards", "mi", "mile", "miles", "nmi", "nm", "nauticalmile", "nauticalmiles", "mg", "milligram", "milligrams", "g", "gram", "grams", "kg", "kilogram", "kilograms", "oz", "ounce", "ounces", "lb", "lbs", "pound", "pounds", "ton", "tons", "ml", "milliliter", "milliliters", "l", "liter", "liters", "dl", "cl", "tsp", "tbsp", "cup", "cups", "pt", "pint", "pints", "qt", "quart", "quarts", "gal", "gallon", "gallons", "s", "sec", "secs", "second", "seconds", "min", "mins", "minute", "minutes", "h", "hr", "hrs", "hour", "hours", "day", "days", "week", "weeks", "month", "months", "year", "years", "c", "f", "k", "celsius", "fahrenheit", "kelvin", "mph", "kph", "kmh", "mps", "fps", "knot", "knots", "b", "byte", "bytes", "kb", "mb", "gb", "tb", "kib", "mib", "gib", "tib", "w", "kw", "mw", "gw", "j", "kj", "mj", "gj", "wh", "kwh", "pa", "kpa", "mpa", "bar", "psi", "atm", "deg", "rad", "usd", "eur", "gbp", "pln", "jpy", "cad", "aud", "chf", "cny"]
-	readonly property string usagePath: `${Paths.strip(Paths.config)}/qs-shell/launcher-usage.json`
+	readonly property string usagePath: `${Paths.strip(Paths.config)}/shell/launcher-usage.json`
 	readonly property string normalizedQuery: root.query.trim()
 	readonly property string normalizedCalcValue: root.normalizedCalcQuery()
 	readonly property bool explicitCalcQuery: root.normalizedQuery.startsWith("=")
