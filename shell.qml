@@ -16,21 +16,24 @@ ShellRoot {
 	Variants {
 		model: Quickshell.screens
 
-			Scope {
-				id: s
-				property ShellScreen modelData
-				Wallpaper {
-					s: s.modelData
-				}
-				Bar {
-					s: s.modelData
-				}
-				NotificationPopup {
-					s: s.modelData
-				}
-				WifiAuthorizationWindow {
-					s: s.modelData
-				}
+		Scope {
+			id: s
+			property ShellScreen modelData
+			Wallpaper {
+				s: s.modelData
 			}
+			DesktopOverlay {
+				s: s.modelData
+			}
+			Bar {
+				s: s.modelData
+			}
+			NotificationPopup {
+				s: s.modelData
+			}
+			WifiAuthorizationWindow {
+				s: s.modelData
+			}
+		}
 	}
 }

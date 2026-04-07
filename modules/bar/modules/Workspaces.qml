@@ -53,18 +53,20 @@ Module {
 					id: wsIndicator
 					color: ws.getColor()
 
-					implicitWidth: 5
+					implicitWidth: ws.getWidth()
 					implicitHeight: 5
 					radius: 5
 
-					PropertyAnimation {
-						id: widthAnim
-						target: wsIndicator
-						property: "implicitWidth"
-						to: ws.getWidth()
-						running: true
-						onRunningChanged: this.running = true
-						duration: 50
+					Behavior on implicitWidth {
+						NumberAnimation {
+							duration: 50
+						}
+					}
+
+					Behavior on color {
+						ColorAnimation {
+							duration: 50
+						}
 					}
 				}
 			}
