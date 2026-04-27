@@ -14,18 +14,21 @@ Module {
 	RowLayout {
 		Repeater {
 			model: root.workspaces
-			RowLayout {
-				id: ws
-				required property HyprlandWorkspace modelData
-				function getState() {
-					if (root.hMonitor.id == modelData.monitor.id && modelData.active)
-						return "active";
+				RowLayout {
+					id: ws
+					required property HyprlandWorkspace modelData
+					function toplevelCount() {
+						return ws.modelData.toplevels?.values?.length || 0;
+					}
+					function getState() {
+						if (root.hMonitor.id == modelData.monitor.id && modelData.active)
+							return "active";
 
-					if (modelData.lastIpcObject.windows > 0)
-						return "occupied";
+						if (toplevelCount() > 0)
+							return "occupied";
 
-					return "empty";
-				}
+						return "empty";
+					}
 				function getColor() {
 					switch (getState()) {
 					case "active":
