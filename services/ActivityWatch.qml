@@ -17,6 +17,7 @@ Singleton {
 	property bool loading: false
 	property string error: ""
 	property date lastUpdated: new Date(0)
+	property int staleThresholdMs: 60000
 
 	readonly property string currentLabel: root.currentApp.length > 0 ? root.currentApp : "No active window"
 	readonly property string subtitle: root.currentTitle.length > 0 ? root.currentTitle : (root.error.length > 0 ? root.error : "ActivityWatch idle")
@@ -101,6 +102,10 @@ Singleton {
 			root.fetchClasses();
 		}, reason => {
 			root.loading = false;
+			root.currentApp = "";
+			root.currentTitle = "";
+			root.categories = [];
+			root.totalDuration = 0;
 			root.error = reason;
 		});
 	}
@@ -109,12 +114,15 @@ Singleton {
 		root.fetchJson(`/buckets/${encodeURIComponent(root.windowBucketId)}/events?limit=1`, payload => {
 			const events = Array.isArray(payload) ? payload : [];
 			const latest = events.length > 0 ? events[events.length - 1] : null;
-			root.currentApp = latest && latest.data && latest.data.app ? `${latest.data.app}` : "";
-			root.currentTitle = latest && latest.data && latest.data.title ? `${latest.data.title}` : "";
-			root.lastUpdated = new Date();
+			const isRecent = root.isRecentEvent(latest);
+			root.currentApp = isRecent && latest && latest.data && latest.data.app ? `${latest.data.app}` : "";
+			root.currentTitle = isRecent && latest && latest.data && latest.data.title ? `${latest.data.title}` : "";
+			root.lastUpdated = isRecent ? new Date(root.eventEndMs(latest)) : new Date(0);
 			root.loading = false;
 		}, reason => {
 			root.loading = false;
+			root.currentApp = "";
+			root.currentTitle = "";
 			root.error = reason;
 		});
 	}
@@ -125,6 +133,8 @@ Singleton {
 			root.fetchTodaySummary();
 		}, reason => {
 			root.loading = false;
+			root.categories = [];
+			root.totalDuration = 0;
 			root.error = reason;
 		});
 	}
@@ -166,6 +176,8 @@ Singleton {
 			root.loading = false;
 		}, reason => {
 			root.loading = false;
+			root.categories = [];
+			root.totalDuration = 0;
 			root.error = reason;
 		});
 	}
@@ -191,6 +203,25 @@ Singleton {
 				return (parts[0] * 3600) + (parts[1] * 60) + parts[2];
 		}
 		return 0;
+	}
+
+	function eventEndMs(event: var): real {
+		if (!event || !event.timestamp)
+			return 0;
+
+		const startedAt = Date.parse(`${event.timestamp}`);
+		if (isNaN(startedAt))
+			return 0;
+
+		return startedAt + (root.parseDuration(event.duration) * 1000);
+	}
+
+	function isRecentEvent(event: var): bool {
+		const endedAt = root.eventEndMs(event);
+		if (endedAt <= 0)
+			return false;
+
+		return (Date.now() - endedAt) <= root.staleThresholdMs;
 	}
 
 	function categoryLabel(event: var): string {

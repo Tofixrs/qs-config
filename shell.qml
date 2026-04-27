@@ -6,8 +6,11 @@ import Quickshell
 import qs.modules.appLauncher
 import qs.modules.bar
 import qs.modules
+import qs.services as Services
 
 ShellRoot {
+	readonly property bool _sessionLockLoaded: Services.SessionLock.locked
+
 	Launcher {}
 	Dashboard {}
 	Calendar {}

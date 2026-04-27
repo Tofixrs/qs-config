@@ -369,16 +369,22 @@ Item {
 				}
 
 				MText {
+					Layout.fillWidth: true
 					text: ActivityWatch.currentLabel
 					font.pointSize: 11
-					wrapMode: Text.Wrap
+					wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+					maximumLineCount: 2
+					elide: Text.ElideRight
 				}
 
 				MText {
+					Layout.fillWidth: true
 					text: ActivityWatch.subtitle
 					font.pointSize: 10
 					color: Theme.inactive
-					wrapMode: Text.Wrap
+					wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+					maximumLineCount: 2
+					elide: Text.ElideRight
 				}
 			}
 

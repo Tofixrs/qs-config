@@ -57,6 +57,12 @@ SectionCard {
 				baseColor: Theme.foreground2
 				onClick: Network.enableWifi(!Network.wifiEnabled)
 			}
+			IconButton {
+				diameter: 28
+				icon: "refresh"
+				acceptedButtons: Qt.LeftButton
+				onClick: Network.rescanWifi()
+			}
 
 			IconButton {
 				diameter: 28

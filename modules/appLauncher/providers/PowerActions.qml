@@ -1,13 +1,15 @@
 import Quickshell
 import qs.modules.appLauncher
+import qs.services
 
 Variants {
 	id: modeProvider
 	enum Actions {
 		Shutdown = 0,
 		Sleep = 1,
-		Reboot = 2,
-		Logout = 3
+		Lock = 2,
+		Reboot = 3,
+		Logout = 4
 	}
 	model: [
 		{
@@ -19,6 +21,11 @@ Variants {
 			action: PowerActions.Actions.Sleep,
 			name: "Sleep",
 			icon: "bedtime"
+		},
+		{
+			action: PowerActions.Actions.Lock,
+			name: "Lock",
+			icon: "lock"
 		},
 		{
 			action: PowerActions.Actions.Reboot,
@@ -47,6 +54,9 @@ Variants {
 					break;
 				case PowerActions.Actions.Sleep:
 					Quickshell.execDetached(["systemctl", "suspend"]);
+					break;
+				case PowerActions.Actions.Lock:
+					SessionLock.lockSession();
 					break;
 				case PowerActions.Actions.Reboot:
 					Quickshell.execDetached(["systemctl", "reboot"]);
