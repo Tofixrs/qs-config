@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Widgets
 import qs.modules.dashboard
@@ -12,6 +13,7 @@ import qs.config
 PWindow {
 	id: root
 	name: "dashboard"
+	readonly property bool idleInhibited: idleInhibitProc.running
 
 	anchors.bottom: true
 	WlrLayershell.layer: WlrLayer.Top
@@ -84,11 +86,18 @@ PWindow {
 					Layout.fillWidth: true
 				}
 
-				PillButton {
-					text: "Monitors"
-					baseColor: Theme.foreground2
-					onClick: Visibilities.set("monitorProfiles", true)
-				}
+						PillButton {
+							text: root.idleInhibited ? "Allow Idle" : "Keep Awake"
+							active: root.idleInhibited
+							baseColor: Theme.foreground2
+							onClick: idleInhibitProc.running = !idleInhibitProc.running
+						}
+
+					PillButton {
+						text: "Monitors"
+						baseColor: Theme.foreground2
+						onClick: Visibilities.set("monitorProfiles", true)
+					}
 
 				IconButton {
 					diameter: 30
@@ -108,5 +117,12 @@ PWindow {
 
 	Component.onCompleted: {
 		Visibilities.addPanel(root.name);
+	}
+
+	Process {
+		id: idleInhibitProc
+		command: ["systemd-inhibit", "--what=idle", "--mode=block", "--why=Dashboard idle inhibit", "bash", "-lc", "while true; do sleep 3600; done"]
+		stdout: StdioCollector {}
+		stderr: StdioCollector {}
 	}
 }
