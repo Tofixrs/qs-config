@@ -29,14 +29,7 @@ PWindow {
 		source: Qt.resolvedUrl(Paths.home + "/wallpaper.png")
 	}
 
-	DesktopWidgets {}
 
-	Timer {
-		interval: 600000
-		repeat: true
-		running: true
-		onTriggered: Weather.refreshCurrent()
-	}
 
 	Component.onCompleted: {
 		Weather.refreshCurrent();

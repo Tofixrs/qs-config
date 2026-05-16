@@ -19,6 +19,7 @@ Module {
 				implicitHeight: 16
 
 				IconImage {
+                                        asynchronous: true
 					source: trayItem.modelData.icon
 					implicitSize: 16
 					anchors.centerIn: parent

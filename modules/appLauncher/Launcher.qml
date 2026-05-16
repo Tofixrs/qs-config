@@ -148,6 +148,7 @@ PWindow {
 							anchors.rightMargin: 10
 							spacing: 5
 							Image {
+                                                            asynchronous: true
 								visible: modelData.icon != "" && modelData.iconType == "system"
 								source: Quickshell.iconPath(modelData.icon, "image-missing")
 								Layout.preferredHeight: root.entryIconSize

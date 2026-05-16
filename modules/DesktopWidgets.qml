@@ -82,7 +82,7 @@ Item {
 
 					ColumnLayout {
 						MText {
-							text: Weather.currentTemp ? `${Weather.currentTemp}°` : "--"
+							text: Weather.currentTemp ? Weather.currentTemp + "°" : "--"
 							font.pointSize: 24
 							font.family: Theme.font
 							color: Theme.text
@@ -117,7 +117,7 @@ Item {
 				}
 
 				MText {
-					text: Weather.error.length > 0 ? `Unable to load weather (${Weather.error})` : ""
+					text: Weather.error.length > 0 ? "Unable to load weather (" + Weather.error + ")" : ""
 					font.pointSize: 10
 					color: Theme.deny
 					visible: Weather.error.length > 0
@@ -167,7 +167,7 @@ Item {
 							}
 
 							MText {
-								text: `${modelData.mintempC || "--"}° / ${modelData.maxtempC || "--"}°`
+								text: (modelData.mintempC || "--") + "° / " + (modelData.maxtempC || "--") + "°"
 								font.pointSize: 10
 								color: Theme.text
 							}
@@ -207,7 +207,7 @@ Item {
 					}
 
 					MText {
-						text: TodoService.totalTasks === 0 ? "No tasks yet" : `${TodoService.completedTasks}/${TodoService.totalTasks} complete`
+						text: TodoService.totalTasks === 0 ? "No tasks yet" : TodoService.completedTasks + "/" + TodoService.totalTasks + " complete"
 						font.pointSize: 10
 						color: Theme.inactive
 					}
@@ -233,7 +233,7 @@ Item {
 				Layout.fillWidth: true
 				spacing: 8
 
-				TextField {
+				MTextField {
 					id: newTodoField
 					Layout.fillWidth: true
 					placeholderText: "Add a task"
@@ -299,147 +299,6 @@ Item {
 							horizontalAlignment: Text.AlignHCenter
 						}
 					}
-				}
-			}
-		}
-	}
-
-	SurfaceCard {
-		id: activityWatchCard
-		anchors.left: parent.left
-		anchors.top: parent.top
-		anchors.leftMargin: 28
-		anchors.topMargin: 56
-		width: 320
-		padding: 14
-		contentSpacing: 10
-		cardColor: Theme.foreground
-		cardBorderWidth: 1
-		cardBorderColor: Theme.hover
-
-		ColumnLayout {
-			Layout.fillWidth: true
-			spacing: 10
-
-			RowLayout {
-				Layout.fillWidth: true
-
-				ColumnLayout {
-					spacing: 2
-
-					MText {
-						text: "ActivityWatch"
-						font.pointSize: 14
-					}
-
-					MText {
-						text: ActivityWatch.loading ? "Refreshing activity" : (ActivityWatch.windowBucketId.length > 0 ? "Today's categorized screen time" : "Waiting for local server")
-						font.pointSize: 10
-						color: Theme.inactive
-					}
-				}
-
-				Item {
-					Layout.fillWidth: true
-				}
-
-				IconButton {
-					diameter: 32
-					icon: "refresh"
-					iconPointSize: 18
-					onClick: ActivityWatch.refresh()
-				}
-			}
-
-			SurfaceCard {
-				Layout.fillWidth: true
-				cardColor: Theme.foreground2
-				padding: 10
-				contentSpacing: 6
-
-				MText {
-					text: ActivityWatch.totalLabel
-					font.pointSize: 18
-				}
-
-				MText {
-					text: "Today"
-					font.pointSize: 10
-					color: Theme.inactive
-				}
-
-				MText {
-					Layout.fillWidth: true
-					text: ActivityWatch.currentLabel
-					font.pointSize: 11
-					wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-					maximumLineCount: 2
-					elide: Text.ElideRight
-				}
-
-				MText {
-					Layout.fillWidth: true
-					text: ActivityWatch.subtitle
-					font.pointSize: 10
-					color: Theme.inactive
-					wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-					maximumLineCount: 2
-					elide: Text.ElideRight
-				}
-			}
-
-			ColumnLayout {
-				Layout.fillWidth: true
-				spacing: 6
-
-				Repeater {
-					model: ActivityWatch.categories
-
-					delegate: ColumnLayout {
-						required property var modelData
-						Layout.fillWidth: true
-						spacing: 4
-
-						RowLayout {
-							Layout.fillWidth: true
-							spacing: 8
-
-							MText {
-								text: modelData.name
-								font.pointSize: 10
-								elide: Text.ElideRight
-								Layout.fillWidth: true
-							}
-
-							MText {
-								text: ActivityWatch.formatDuration(modelData.duration)
-								font.pointSize: 10
-								color: Theme.inactive
-							}
-						}
-
-						Rectangle {
-							Layout.fillWidth: true
-							implicitHeight: 8
-							radius: 4
-							color: Theme.hover
-
-							Rectangle {
-								width: parent.width * Math.max(0, Math.min(1, modelData.ratio))
-								height: parent.height
-								radius: parent.radius
-								color: Theme.active
-							}
-						}
-					}
-				}
-
-				MText {
-					text: ActivityWatch.error
-					font.pointSize: 10
-					color: Theme.deny
-					wrapMode: Text.Wrap
-					visible: ActivityWatch.error.length > 0
 				}
 			}
 		}

@@ -16,6 +16,7 @@ ShellRoot {
 	Calendar {}
 	Notifications {}
 	MonitorProfilesWindow {}
+	DesktopOverlay {}
 	Variants {
 		model: Quickshell.screens
 
@@ -23,9 +24,6 @@ ShellRoot {
 			id: s
 			property ShellScreen modelData
 			Wallpaper {
-				s: s.modelData
-			}
-			DesktopOverlay {
 				s: s.modelData
 			}
 			Bar {

@@ -8,9 +8,6 @@ PWindow {
 	id: root
 	name: "desktopOverlay"
 
-	required property ShellScreen s
-	screen: s
-
 	anchors {
 		top: true
 		bottom: true
@@ -35,7 +32,10 @@ PWindow {
 			color: "#66000000"
 		}
 
-		DesktopWidgets {}
+		DesktopWidgets {
+			anchors.fill: parent
+			visible: root.visible
+		}
 	}
 
 	Component.onCompleted: Visibilities.addPanel(root.name)

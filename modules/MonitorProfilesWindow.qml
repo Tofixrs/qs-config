@@ -31,8 +31,12 @@ Window {
 
 	visible: Visibilities.is(root.panelName)
 	onVisibleChanged: {
-		if (visible)
+		if (visible) {
 			root.requestActivate();
+			MonitorProfiles.resetDraftsFromSystem();
+			MonitorProfiles.refreshSavedProfiles();
+			root.ensureSelection();
+		}
 	}
 	onClosing: close => {
 		close.accepted = false;
@@ -270,7 +274,7 @@ Window {
 								color: Theme.inactive
 							}
 
-							TextField {
+							MTextField {
 								text: MonitorProfiles.profileName
 								enabled: !MonitorProfiles.busy
 								Layout.fillWidth: true
@@ -798,7 +802,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.width}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -813,7 +817,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.height}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -828,7 +832,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.refreshRate}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -843,7 +847,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.scale}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -858,7 +862,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.x}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -873,7 +877,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.y}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -888,7 +892,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? `${root.selectedMonitor.transform}` : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -903,7 +907,7 @@ Window {
 													color: Theme.inactive
 													font.pointSize: 10
 												}
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? root.selectedMonitor.mirror : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													selectByMouse: true
@@ -924,7 +928,7 @@ Window {
 													font.pointSize: 10
 												}
 
-												TextField {
+												MTextField {
 													text: root.selectedMonitor ? root.selectedMonitor.extraArgs : ""
 													enabled: !MonitorProfiles.busy && !!root.selectedMonitor
 													Layout.fillWidth: true

@@ -22,19 +22,26 @@ Singleton {
 	signal updated
 	signal failed(string reason)
 
+	Timer {
+		interval: 600000
+		running: true
+		repeat: true
+		onTriggered: root.refreshCurrent()
+	}
+
 	function _buildUrl(location, options) {
 		const base = "https://wttr.in/";
 		const loc = encodeURIComponent((location && location.trim()) || "MyLocation");
 		const params = ["format=j1", "m", "Q"]; // j1 JSON, metric units, quiet output
 		if (options) {
 			if (options.lang)
-				params.push(`lang=${encodeURIComponent(options.lang)}`);
+				params.push("lang=" + encodeURIComponent(options.lang));
 			if (options.units)
-				params.push(`u=${encodeURIComponent(options.units)}`);
+				params.push("u=" + encodeURIComponent(options.units));
 			if (options.theme)
-				params.push(`theme=${encodeURIComponent(options.theme)}`);
+				params.push("theme=" + encodeURIComponent(options.theme));
 		}
-		return `${base}${loc}?${params.join("&")}`;
+		return base + loc + "?" + params.join("&");
 	}
 
 	function refresh(location, options) {
@@ -60,7 +67,7 @@ Singleton {
 					root.failed(root.error);
 				}
 			} else {
-				root.error = `HTTP ${request.status}`;
+				root.error = "HTTP " + request.status;
 				root.failed(root.error);
 			}
 		};

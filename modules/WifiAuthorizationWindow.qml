@@ -51,7 +51,7 @@ PWindow {
 				wrapMode: Text.Wrap
 			}
 
-			TextField {
+			MTextField {
 				id: passwordField
 				placeholderText: "Password"
 				echoMode: TextInput.Password

@@ -70,7 +70,7 @@ ColumnLayout {
 					}
 				}
 
-				TextField {
+				MTextField {
 					id: editField
 					Layout.fillWidth: true
 					visible: root.editing
@@ -154,7 +154,7 @@ ColumnLayout {
 					Layout.preferredWidth: 28
 				}
 
-				TextField {
+				MTextField {
 					id: subtaskField
 					Layout.fillWidth: true
 					placeholderText: "Add a subtask"

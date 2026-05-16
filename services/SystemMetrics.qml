@@ -58,7 +58,7 @@ Singleton {
 	Component.onCompleted: refresh()
 
 	Timer {
-		interval: 2000
+		interval: 10000
 		running: true
 		repeat: true
 		onTriggered: root.refresh()
@@ -97,7 +97,7 @@ Singleton {
 
 	Process {
 		id: diskProc
-		command: ["bash", "-lc", "df -P / | awk 'NR==2 {print $5}'"]
+		command: ["sh", "-c", "df -P / | awk 'NR==2 {print $5}'"]
 
 		stdout: StdioCollector {
 			onStreamFinished: {

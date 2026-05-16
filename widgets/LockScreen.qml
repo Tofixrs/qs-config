@@ -234,7 +234,7 @@ Rectangle {
 									color: passwordField.activeFocus ? Theme.active : Theme.inactive
 								}
 
-								TextField {
+								MTextField {
 									id: passwordField
 									Layout.fillWidth: true
 									verticalAlignment: Text.AlignVCenter
@@ -248,10 +248,13 @@ Rectangle {
 									font.family: Theme.font
 									font.pointSize: 12
 									background: null
-									onTextChanged: {
-										if (text !== SessionLock.response)
-											SessionLock.response = text;
-									}
+					onTextChanged: {
+						if (text !== SessionLock.response) {
+							SessionLock.response = text;
+							if (SessionLock.statusError)
+								SessionLock.statusText = "";
+						}
+					}
 									onAccepted: SessionLock.submit()
 									Component.onCompleted: {
 										text = SessionLock.response;
@@ -290,14 +293,14 @@ Rectangle {
 							color: SessionLock.statusError ? "#2c151b" : "#151b26"
 							border.width: 1
 							border.color: SessionLock.statusError ? "#6b2231" : "#222b3b"
-							visible: statusText.implicitHeight > 0
+							visible: statusText.text.length > 0
 							implicitHeight: statusText.implicitHeight + 20
 
 							MText {
 								id: statusText
 								anchors.fill: parent
 								anchors.margins: 10
-								text: SessionLock.statusText.length > 0 ? SessionLock.statusText : (SessionLock.authenticating ? "PAM is waiting for the next step." : "")
+								text: SessionLock.statusText
 								font.pointSize: 10
 								color: SessionLock.statusError ? Theme.deny : Theme.inactive
 								wrapMode: Text.Wrap

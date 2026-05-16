@@ -109,11 +109,12 @@ Singleton {
 		config: root.pamConfig
 
 		onPamMessage: {
-			if (message.length === 0) {
-				root.statusText = "";
-				root.statusError = false;
+			if (message.length === 0)
 				return;
-			}
+
+			// Do not let "Enter password" prompts overwrite a previous error message
+			if (root.statusError && !messageIsError)
+				return;
 
 			root.statusText = message;
 			root.statusError = messageIsError;
@@ -128,14 +129,16 @@ Singleton {
 				break;
 			case PamResult.Failed:
 				root.response = "";
+				// Ensure the error persists
 				root.statusText = pam.message.length > 0 ? pam.message : "Authentication failed.";
 				root.statusError = true;
-				if (lock.locked)
-					root.beginAuth();
+				
+				// Delay the restart of auth slightly to ensure the UI catches the error state
+				authRestartTimer.start();
 				break;
 			case PamResult.MaxTries:
 				root.response = "";
-				root.statusText = "Maximum authentication attempts reached. Retry to start a new session.";
+				root.statusText = "Maximum authentication attempts reached.";
 				root.statusError = true;
 				break;
 			case PamResult.Error:
@@ -148,8 +151,18 @@ Singleton {
 
 		onError: error => {
 			root.response = "";
-			root.statusText = `Authentication backend error: ${error}`;
+			root.statusText = "Authentication backend error: " + error;
 			root.statusError = true;
+		}
+	}
+
+	Timer {
+		id: authRestartTimer
+		interval: 100
+		repeat: false
+		onTriggered: {
+			if (root.locked)
+				root.beginAuth();
 		}
 	}
 }
