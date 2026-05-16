@@ -9,7 +9,8 @@
   ...
 }: let
   inherit (lib.modules) mkIf;
-  inherit (lib.options) mkEnableOption mkOption types;
+  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib) types;
   cfg = config.programs.qs-config;
   inherit (pkgs.stdenv.hostPlatform) system;
   packages = self.packages.${system};
